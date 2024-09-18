@@ -10,6 +10,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
+// TODO: add new fields to allow multi-stage application
 type Model struct {
 	List        list.Model
 	NoteSources []string
@@ -26,6 +27,7 @@ func (m Model) Init() tea.Cmd {
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
+		// TODO: wrap this entire section up in a function somewhere else
 		switch msg.String() {
 		case "ctrl+c":
 			return m, tea.Quit

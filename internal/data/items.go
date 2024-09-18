@@ -4,14 +4,19 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"slices"
 
 	"github.com/charmbracelet/bubbles/list"
 )
+
+// TODO: get note extensions from config file? (or use these)
+var noteExts = []string{".md", ".mdx", ".tex", ".txt", ".qmd", ".rmd", ".Rmd"}
 
 type Note struct {
 	title string
 	desc  string
 	path  string
+	ext   string
 }
 
 func (i Note) Title() string {
@@ -35,6 +40,7 @@ func GetItems(noteSources []string) []list.Item {
 	for _, src := range noteSources {
 		items, err := getDirContents(src)
 		if err != nil {
+			fmt.Println(err)
 			return nil
 		}
 		out = append(out, items...)
@@ -46,7 +52,7 @@ func GetItems(noteSources []string) []list.Item {
 func getDirContents(dir string) ([]list.Item, error) {
 	var entries []list.Item
 
-	err := filepath.WalkDir(dir, func(path string, d os.DirEntry, err error) error {
+	err := filepath.WalkDir(dir, func(path string, entry os.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
@@ -56,16 +62,23 @@ func getDirContents(dir string) ([]list.Item, error) {
 			return err
 		}
 
-		info, err := d.Info()
+		info, err := entry.Info()
 		if err != nil {
 			return err
 		}
 
+		ext := filepath.Ext(entry.Name())
+		if !slices.Contains(noteExts, ext) {
+			return nil
+		}
+
 		entries = append(entries, Note{
-			title: d.Name(),
+			title: entry.Name(),
 			desc:  fmt.Sprintf("Mode: %s | Size: %d bytes\n", info.Mode(), info.Size()),
 			path:  relPath,
+			ext:   ext,
 		})
+
 		return nil
 	})
 	if err != nil {

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 var configFiles []string = []string{"notemgr.json", ".notemgr.json", ".notemgrrc"}
@@ -34,7 +35,17 @@ func ParseConfig() Config {
 		return defaultConfig()
 	}
 
-	return Config{}
+	for i, src := range cfg.NoteSources {
+		temp, err := tildeToHome(src)
+		if err != nil {
+			// CHANGE: maybe switch to log instead of print
+			fmt.Println(err)
+			continue
+		}
+		cfg.NoteSources[i] = temp
+	}
+
+	return cfg
 }
 
 func findConfigurationFile() (string, error) {
@@ -67,8 +78,8 @@ func defaultConfig() Config {
 		panic(fmt.Sprintf("Error getting user home directory: %s\n", err))
 	}
 
-	for _, noteLocation := range configFiles {
-		dir := filepath.Join(home, noteLocation)
+	for _, cfgLocation := range configFiles {
+		dir := filepath.Join(home, cfgLocation)
 		if _, err := os.Stat(dir); err != nil {
 			continue
 		}
@@ -80,4 +91,18 @@ func defaultConfig() Config {
 
 	// TODO: rename with better name
 	panic("Error: No Note Manager config directory specified and no fallback was found.")
+}
+
+func tildeToHome(path string) (string, error) {
+	if !strings.HasPrefix(path, "~/") {
+		return path, nil
+	}
+
+	home, err := os.UserHomeDir()
+	if err != nil {
+		fmt.Println("Error getting user home directory:", err)
+		return "", err
+	}
+
+	return strings.Replace(path, "~", home, 1), nil
 }
