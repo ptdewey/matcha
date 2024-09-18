@@ -1,4 +1,4 @@
-module github.com/ptdewey/notes-manager
+module github.com/ptdewey/oolong
 
 go 1.22.5
 

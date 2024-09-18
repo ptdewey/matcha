@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ptdewey/notes-manager/internal/config"
-	"github.com/ptdewey/notes-manager/internal/data"
-	"github.com/ptdewey/notes-manager/internal/model"
+	"github.com/ptdewey/oolong/internal/config"
+	"github.com/ptdewey/oolong/internal/data"
+	"github.com/ptdewey/oolong/internal/model"
 
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
