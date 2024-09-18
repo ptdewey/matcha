@@ -17,6 +17,10 @@ func main() {
 
 	items := data.GetItems(cfg.NoteSources)
 
+	// TODO: define entrypoint as a checkbox selector if an argument is not passed
+	// - choose search/create note
+	// - passing arg will choose one initially
+
 	m := model.Model{
 		List:        list.New(items, list.NewDefaultDelegate(), 0, 0),
 		NoteSources: cfg.NoteSources,
