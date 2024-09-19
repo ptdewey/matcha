@@ -5,13 +5,13 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/ptdewey/oolong/internal/data"
+	"github.com/ptdewey/oolong/internal/editor"
 	"github.com/ptdewey/oolong/internal/ui"
 )
 
 func (m Model) updateSearch(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		// TODO: wrap this entire section up in a function somewhere else ()
 		switch msg.String() {
 		case "enter":
 			selectedItem := m.List.SelectedItem()
@@ -25,24 +25,21 @@ func (m Model) updateSearch(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, nil
 			}
 
-			// TODO: open/create note
-			fmt.Println(item.Title())
+			// set selected note and change to edit mode
+			m.SelectedNote = item
 
-			return m, tea.Quit
+			// return m, nil
+			return m, editor.OpenEditor(item.Path())
 		}
 	case tea.WindowSizeMsg:
-		// Handle resizing dynamically
+		// dynamically handle window sizing (fixes no list items showing)
 		m.width = msg.Width
 		m.height = msg.Height
 
-		// Calculate the dynamic size for the list, considering styling
 		listWidth := m.width - ui.OolongStyle.GetHorizontalFrameSize()
 		listHeight := m.height - ui.OolongStyle.GetVerticalFrameSize()
 
 		m.List.SetSize(listWidth, listHeight)
-
-		// h, v := ui.OolongStyle.GetFrameSize()
-		// m.List.SetSize(msg.Width-h, msg.Height-v)
 	}
 
 	var cmd tea.Cmd

@@ -2,12 +2,21 @@ package model
 
 import (
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/ptdewey/oolong/internal/editor"
 )
 
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	if msg, ok := msg.(tea.KeyMsg); ok {
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
 		k := msg.String()
 		if k == "esc" || k == "ctrl+c" || k == "q" {
+			return m, tea.Quit
+		}
+	case editor.EditorFinishedMsg:
+		// m.Mode = BROWSE
+		m.Mode = SEARCH
+		if msg.Err != nil {
+			m.err = msg.Err
 			return m, tea.Quit
 		}
 	}
@@ -22,15 +31,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// TODO: handle note creation
 		return m, nil
 	case SEARCH:
-		// TODO: search handler
-		// FIX: there is something wrong with the list view
 		return m.updateSearch(msg)
-	case EDIT:
-		// TODO: open for editing
-		return m, nil
 	}
-
-	// TODO: handle different update modes post landing
 
 	return m, nil
 }
