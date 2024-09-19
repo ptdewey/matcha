@@ -41,7 +41,7 @@ func GetItems(noteSources []string) []list.Item {
 		items, err := getDirContents(src)
 		if err != nil {
 			fmt.Println(err)
-			return nil
+			continue
 		}
 		out = append(out, items...)
 	}

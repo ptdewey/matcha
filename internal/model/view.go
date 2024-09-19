@@ -1,7 +1,15 @@
 package model
 
-import "github.com/ptdewey/oolong/internal/ui"
-
 func (m Model) View() string {
-	return ui.Style.Render(m.List.View())
+	switch m.Mode {
+	case LANDING:
+		return m.viewLanding()
+	case CREATE:
+		// TODO:
+		return "TODO: create note view"
+	case SEARCH:
+		return m.viewSearch()
+	}
+
+	return ""
 }

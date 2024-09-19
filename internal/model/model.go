@@ -19,6 +19,9 @@ type Model struct {
 	NoteSources []string
 	Mode        int
 	ModeChosen  bool
+	cursor      int
+	width       int
+	height      int
 }
 
 func (m Model) Init() tea.Cmd {
