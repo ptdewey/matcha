@@ -20,20 +20,21 @@ type Note struct {
 	ext     string
 }
 
-// TODO: figure out why filtering is looking weird
 func (i Note) Title() string {
 	return i.title
 	// return i.relPath
 }
 
+// FIX: if filtering by relpath and using title for title, fix underlining (probably a delegate setting?)
 func (i Note) Description() string {
-	// return i.relPath
-	return i.title
+	return i.relPath
+	// return i.title
 	// return i.desc
 }
 
 func (i Note) FilterValue() string {
-	return i.title
+	// return i.title
+	return i.relPath
 }
 
 func (i Note) Path() string {
