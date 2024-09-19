@@ -15,11 +15,15 @@ import (
 func main() {
 	cfg := config.ParseConfig()
 
+	// TODO: possibly move this somewhere else to avoid loading notes during quick-launch/create
 	items := data.GetItems(cfg.NoteSources)
 
 	// TODO: define entrypoint as a checkbox selector if an argument is not passed
 	// - choose search/create note
 	// - passing arg will choose one initially
+	// other options?
+	// - option for quickopening a note (pass current dir into filter with date?)
+	//    - this will require some config file setup
 
 	m := model.Model{
 		List:        list.New(items, list.NewDefaultDelegate(), 0, 0),

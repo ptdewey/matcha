@@ -7,7 +7,7 @@ func (m Model) View() string {
 	case CREATE:
 		// TODO:
 		return "TODO: create note view"
-	case SEARCH:
+	case SEARCH, BROWSE:
 		return m.viewSearch()
 	}
 

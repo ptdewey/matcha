@@ -12,7 +12,7 @@ import (
 func (m Model) updateSearch(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		switch k := msg.String(); k {
+		switch msg.String() {
 		case "enter":
 			if !m.List.SettingFilter() {
 				selectedItem := m.List.SelectedItem()
@@ -31,10 +31,6 @@ func (m Model) updateSearch(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 				// open not for editing
 				return m, editor.OpenEditor(item.Path())
-			}
-		default:
-			if !m.List.SettingFilter() && (k == "q" || k == "esc") {
-				return m, tea.Quit
 			}
 		}
 	case tea.WindowSizeMsg:

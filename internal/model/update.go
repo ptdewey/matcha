@@ -9,6 +9,14 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		k := msg.String()
+		if m.Mode == SEARCH {
+			if m.List.SettingFilter() || m.List.IsFiltered() {
+				if k == "esc" {
+					m.List.ResetFilter()
+					return m, nil
+				}
+			}
+		}
 		if k == "esc" || k == "ctrl+c" || k == "q" {
 			return m, tea.Quit
 		}
@@ -31,7 +39,11 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case CREATE:
 		// TODO: handle note creation
 		return m, nil
+	case BROWSE:
+		// TODO: browse mode adaptations
+		return m.updateSearch(msg)
 	case SEARCH:
+		// TODO: send a key message at some point
 		return m.updateSearch(msg)
 	}
 
