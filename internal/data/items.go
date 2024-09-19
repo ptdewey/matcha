@@ -20,17 +20,20 @@ type Note struct {
 	ext     string
 }
 
+// TODO: figure out why filtering is looking weird
 func (i Note) Title() string {
 	return i.title
+	// return i.relPath
 }
 
 func (i Note) Description() string {
-	return i.relPath
+	// return i.relPath
+	return i.title
 	// return i.desc
 }
 
 func (i Note) FilterValue() string {
-	return i.path
+	return i.title
 }
 
 func (i Note) Path() string {

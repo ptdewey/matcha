@@ -12,34 +12,36 @@ import (
 func (m Model) updateSearch(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		switch msg.String() {
+		switch k := msg.String(); k {
 		case "enter":
-			selectedItem := m.List.SelectedItem()
-			if selectedItem == nil {
-				return m, nil
+			if !m.List.SettingFilter() {
+				selectedItem := m.List.SelectedItem()
+				if selectedItem == nil {
+					return m, nil
+				}
+
+				item, ok := selectedItem.(data.Note)
+				if !ok {
+					fmt.Println("Error: could not type assert to data.Note")
+					return m, nil
+				}
+
+				// set selected note and change to edit mode
+				m.SelectedNote = item
+
+				// open not for editing
+				return m, editor.OpenEditor(item.Path())
 			}
-
-			item, ok := selectedItem.(data.Note)
-			if !ok {
-				fmt.Println("Error: could not type assert to data.Item")
-				return m, nil
+		default:
+			if !m.List.SettingFilter() && (k == "q" || k == "esc") {
+				return m, tea.Quit
 			}
-
-			// set selected note and change to edit mode
-			m.SelectedNote = item
-
-			// return m, nil
-			return m, editor.OpenEditor(item.Path())
 		}
 	case tea.WindowSizeMsg:
 		// dynamically handle window sizing (fixes no list items showing)
-		m.width = msg.Width
-		m.height = msg.Height
-
-		listWidth := m.width - ui.OolongStyle.GetHorizontalFrameSize()
-		listHeight := m.height - ui.OolongStyle.GetVerticalFrameSize()
-
-		m.List.SetSize(listWidth, listHeight)
+		h, v := ui.OolongStyle.GetFrameSize()
+		m.width, m.height = msg.Width-h, msg.Height-v
+		m.List.SetSize(m.width, m.height)
 	}
 
 	var cmd tea.Cmd
@@ -49,6 +51,6 @@ func (m Model) updateSearch(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Model) viewSearch() string {
-	// TODO:
+	// TODO: customize views
 	return ui.OolongStyle.Render(m.List.View())
 }

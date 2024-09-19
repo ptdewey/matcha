@@ -15,6 +15,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case editor.EditorFinishedMsg:
 		// m.Mode = BROWSE
 		m.Mode = SEARCH
+		m.List.ResetFilter()
 		if msg.Err != nil {
 			m.err = msg.Err
 			return m, tea.Quit

@@ -22,8 +22,7 @@ func main() {
 	// - passing arg will choose one initially
 
 	m := model.Model{
-		List: list.New(items, list.NewDefaultDelegate(), 0, 0),
-		// List:        list.New(items, itemDelegate{}, 50, 30),
+		List:        list.New(items, list.NewDefaultDelegate(), 0, 0),
 		NoteSources: cfg.NoteSources,
 	}
 	m.List.Title = "Notes"

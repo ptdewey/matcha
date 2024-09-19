@@ -1,8 +1,6 @@
 package model
 
 import (
-	"fmt"
-
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/ptdewey/oolong/internal/ui"
@@ -32,7 +30,9 @@ func (m Model) updateLanding(msg tea.Msg) (tea.Model, tea.Cmd) {
 			// set size based on terminal to fix broken list size
 			m.List.SetSize(m.width, m.height)
 
-			return m, nil
+			return m, func() tea.Msg {
+				return tea.WindowSizeMsg{Width: m.width, Height: m.height}
+			}
 		}
 	}
 
@@ -41,7 +41,7 @@ func (m Model) updateLanding(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m Model) viewLanding() string {
 	if m.ModeChosen {
-		return fmt.Sprintf("mode: %d\n", m.Mode)
+		return ""
 	}
 
 	var createButton, searchButton string

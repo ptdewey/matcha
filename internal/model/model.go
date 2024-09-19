@@ -28,9 +28,10 @@ type Model struct {
 }
 
 func (m Model) Init() tea.Cmd {
-	return tea.Batch(
-		func() tea.Msg {
-			return tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'/'}}
-		},
-	)
+	return nil
+	// return tea.Batch(
+	// 	func() tea.Msg {
+	// 		return tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'/'}}
+	// 	},
+	// )
 }
