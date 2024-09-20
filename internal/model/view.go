@@ -5,10 +5,9 @@ func (m Model) View() string {
 	case LANDING:
 		return m.viewLanding()
 	case CREATE:
-		// TODO:
-		return "TODO: create note view"
+		return m.viewCreate()
 	case SEARCH, BROWSE:
-		return m.viewSearch()
+		return m.viewBrowse()
 	}
 
 	return ""

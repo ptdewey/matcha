@@ -9,7 +9,9 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		k := msg.String()
-		if m.Mode == SEARCH {
+		// NOTE: mode should always be browse at this point
+		// if m.Mode == SEARCH || m.Mode == BROWSE {
+		if m.Mode == BROWSE {
 			if m.List.SettingFilter() || m.List.IsFiltered() {
 				if k == "esc" {
 					m.List.ResetFilter()
@@ -21,11 +23,13 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		}
 	case editor.EditorFinishedMsg:
-		// m.Mode = BROWSE
-		m.Mode = SEARCH
+		// TODO: change mode after editor exit
+		m.Mode = BROWSE
+		// m.Mode = SEARCH
+
 		m.List.ResetFilter()
 		if msg.Err != nil {
-			m.err = msg.Err
+			// m.err = msg.Err
 			return m, tea.Quit
 		}
 	}
@@ -37,14 +41,18 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	switch m.Mode {
 	case CREATE:
-		// TODO: handle note creation
-		return m, nil
+		return m.updateCreate(msg)
 	case BROWSE:
-		// TODO: browse mode adaptations
-		return m.updateSearch(msg)
+		return m.updateBrowse(msg)
 	case SEARCH:
-		// TODO: send a key message at some point
-		return m.updateSearch(msg)
+		// set mode to browse for next iteration
+		m.Mode = BROWSE
+
+		// call update with keymsg to trigger filter mode on enter
+		m, _ := m.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'/'}})
+
+		// call update and ensure windowsize event is called
+		return m.(Model).updateBrowse(msg)
 	}
 
 	return m, nil

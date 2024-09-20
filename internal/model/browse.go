@@ -9,7 +9,7 @@ import (
 	"github.com/ptdewey/oolong/internal/ui"
 )
 
-func (m Model) updateSearch(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m Model) updateBrowse(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
@@ -46,7 +46,7 @@ func (m Model) updateSearch(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, cmd
 }
 
-func (m Model) viewSearch() string {
+func (m Model) viewBrowse() string {
 	// TODO: customize views
 	return ui.OolongStyle.Render(m.List.View())
 }
