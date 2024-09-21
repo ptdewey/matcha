@@ -37,9 +37,9 @@ func (m Model) updateCreate(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.nextInput()
 		case tea.KeyCtrlC, tea.KeyEsc:
 			return m, tea.Quit
-		case tea.KeyShiftTab, tea.KeyCtrlP:
+		case tea.KeyShiftTab, tea.KeyCtrlP, tea.KeyUp:
 			m.prevInput()
-		case tea.KeyTab, tea.KeyCtrlN:
+		case tea.KeyTab, tea.KeyCtrlN, tea.KeyDown:
 			m.nextInput()
 		}
 		for i := range m.Inputs {
@@ -62,16 +62,16 @@ func (m Model) updateCreate(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m Model) viewCreate() string {
 	return fmt.Sprintf(
 		`Create Note:
-%s
-%s
+    %s
+    %s
 
-%s
-%s
+    %s
+    %s
 
-%s
-%s
+    %s
+    %s
 
-%s
+    %s
 `,
 		ui.InputStyle.Width(30).Render("Filename"),
 		m.Inputs[name].View(),
@@ -103,6 +103,8 @@ func initTextInput() []textinput.Model {
 	inputs[ext].CharLimit = 0
 	inputs[ext].Width = 15
 	inputs[ext].Prompt = ""
+
+	// TODO: field for templates to use? (might need to be a selector of some kind to allow multiple)
 
 	return inputs
 }
