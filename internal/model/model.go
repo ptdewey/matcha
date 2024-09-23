@@ -16,6 +16,8 @@ const (
 	EDIT
 )
 
+var cfg config.Config
+
 // TODO: add new fields to allow multi-stage application
 type Model struct {
 	// model mode
@@ -39,14 +41,16 @@ type Model struct {
 	err error
 }
 
+func init() {
+	cfg = config.ParseConfig()
+}
+
 func (m Model) Init() tea.Cmd {
 	// return nil
 	return textinput.Blink
 }
 
 func InitialModel() Model {
-	cfg := config.ParseConfig()
-
 	// TODO: possibly move this somewhere else to avoid loading notes during quick-launch/create
 	items := data.GetItems(cfg.NoteSources)
 	inputs := initTextInput()

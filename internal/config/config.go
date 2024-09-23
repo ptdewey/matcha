@@ -9,10 +9,13 @@ import (
 	"strings"
 )
 
-var configFiles []string = []string{"notemgr.json", ".notemgr.json", ".notemgrrc"}
+var configFiles []string = []string{"oolong.json", ".oolong.json", ".oolongrc"}
 
 type Config struct {
 	NoteSources []string `json:"noteSources"`
+	// CHANGE: to list with template selection for create to allow multiple options
+	DefaultExt string `json:"defaultExt"`
+	// TODO: template locations
 }
 
 func ParseConfig() Config {
@@ -38,7 +41,7 @@ func ParseConfig() Config {
 	for i, src := range cfg.NoteSources {
 		temp, err := tildeToHome(src)
 		if err != nil {
-			// CHANGE: maybe switch to log instead of print
+			// CHANGE: maybe switch to logging instead of print?
 			fmt.Println(err)
 			continue
 		}
@@ -86,11 +89,11 @@ func defaultConfig() Config {
 
 		return Config{
 			NoteSources: []string{dir},
+			DefaultExt:  ".md",
 		}
 	}
 
-	// TODO: rename with better name
-	panic("Error: No Note Manager config directory specified and no fallback was found.")
+	panic("Error: No config file specified and no fallback was found.")
 }
 
 func tildeToHome(path string) (string, error) {

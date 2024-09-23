@@ -23,13 +23,9 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		}
 	case editor.EditorFinishedMsg:
-		// TODO: change mode after editor exit
 		m.Mode = BROWSE
-		// m.Mode = SEARCH
-
 		m.List.ResetFilter()
 		if msg.Err != nil {
-			// m.err = msg.Err
 			return m, tea.Quit
 		}
 	}
