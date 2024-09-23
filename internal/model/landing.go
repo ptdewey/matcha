@@ -3,7 +3,6 @@ package model
 import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/ptdewey/oolong/internal/ui"
 )
 
 func (m Model) updateLanding(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -47,11 +46,11 @@ func (m Model) viewLanding() string {
 	var createButton, searchButton string
 
 	if m.cursor == 0 {
-		createButton = ui.ActiveButton.Render("Create Note")
-		searchButton = ui.InactiveButton.Render("Search Notes")
+		createButton = ActiveButton.Render("Create Note")
+		searchButton = InactiveButton.Render("Search Notes")
 	} else {
-		createButton = ui.InactiveButton.Render("Create Note")
-		searchButton = ui.ActiveButton.Render("Search Notes")
+		createButton = InactiveButton.Render("Create Note")
+		searchButton = ActiveButton.Render("Search Notes")
 	}
 
 	gap := lipgloss.NewStyle().Width(5).Render(" ")

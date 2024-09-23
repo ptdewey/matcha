@@ -8,9 +8,9 @@ import (
 
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 	"github.com/ptdewey/oolong/internal/editor"
 	"github.com/ptdewey/oolong/internal/notes"
-	"github.com/ptdewey/oolong/internal/ui"
 )
 
 const (
@@ -69,31 +69,37 @@ func (m Model) updateCreate(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m Model) viewCreate() string {
 	// TODO: make this look way better
-	return fmt.Sprintf(
-		`Create Note:
-    %s
-    %s
+	// - maybe use lipgloss.table?
 
-    %s
-    %s
+	return lipgloss.Place(m.width, m.height, lipgloss.Center, lipgloss.Center,
+		fmt.Sprintf(
+			`%s
 
-    %s
-    %s
+%s
+%s
 
-    %s
+%s
+%s
+
+%s
+%s
+
+%s
 `,
-		ui.InputStyle.Width(30).Render("Filename"),
-		m.Inputs[name].View(),
-		ui.InputStyle.Width(30).Render("Directory"),
-		m.Inputs[dir].View(),
-		ui.InputStyle.Width(15).Render("Extension"),
-		m.Inputs[ext].View(),
-		ui.ContinueStyle.Render("Continue ->"),
-	) + "\n"
+			HeaderStyle.Render("Create Note:"),
+			InputHeaderStyle.Render("Filename"),
+			InputStyle.Render(m.Inputs[name].View()),
+			InputHeaderStyle.Render("Directory"),
+			InputStyle.Render(m.Inputs[dir].View()),
+			InputHeaderStyle.Render("Extension"),
+			InputStyle.Render(m.Inputs[ext].View()),
+			ContinueStyle.Render("Continue ->"),
+		))
 }
 
 func initTextInput() []textinput.Model {
 	defaultName, defaultRelPath := notes.GenFileNamePath()
+	// REFACTOR: change defaultpath to be relative to notes directory, not system
 	defaultPath := filepath.Join(cfg.NoteSources[0], defaultRelPath)
 
 	var inputs []textinput.Model = make([]textinput.Model, 3)
@@ -103,17 +109,17 @@ func initTextInput() []textinput.Model {
 	inputs[name].Placeholder = defaultName
 	inputs[name].Focus()
 	inputs[name].CharLimit = 0
-	inputs[name].Width = 40
+	inputs[name].Width = 20
 
 	// directory
 	inputs[dir] = textinput.New()
 	inputs[dir].Placeholder = defaultPath
-	inputs[dir].Width = 60
+	inputs[dir].Width = 40
 
 	// file extension
 	inputs[ext] = textinput.New()
 	inputs[ext].Placeholder = cfg.DefaultExt
-	inputs[ext].Width = 30
+	inputs[ext].Width = 10
 
 	// TODO: field for templates to use? (might need to be a selector of some kind to allow multiple)
 
@@ -139,6 +145,7 @@ func (m *Model) checkJoinInputs() string {
 	}
 
 	// check directory, set to default if empty
+	// FIX: add handling of ~/ in input
 	d := m.Inputs[dir]
 	if d.Value() == "" {
 		d.SetValue(d.Placeholder)

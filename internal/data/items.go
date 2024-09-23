@@ -25,7 +25,7 @@ func (i Note) Title() string {
 	// return i.relPath
 }
 
-// FIX: if filtering by relpath and using title for title, fix underlining (probably a delegate setting?)
+// FIX: if filtering by relpath and using title for title, fix underlining (possibly a delegate setting?)
 func (i Note) Description() string {
 	return i.relPath
 	// return i.title

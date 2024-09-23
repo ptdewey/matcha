@@ -6,7 +6,6 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/ptdewey/oolong/internal/data"
 	"github.com/ptdewey/oolong/internal/editor"
-	"github.com/ptdewey/oolong/internal/ui"
 )
 
 func (m Model) updateBrowse(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -35,7 +34,7 @@ func (m Model) updateBrowse(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	case tea.WindowSizeMsg:
 		// dynamically handle window sizing (fixes no list items showing)
-		h, v := ui.OolongStyle.GetFrameSize()
+		h, v := OolongStyle.GetFrameSize()
 		m.width, m.height = msg.Width-h, msg.Height-v
 		m.List.SetSize(m.width, m.height)
 	}
@@ -48,5 +47,5 @@ func (m Model) updateBrowse(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m Model) viewBrowse() string {
 	// TODO: customize views
-	return ui.OolongStyle.Render(m.List.View())
+	return OolongStyle.Render(m.List.View())
 }
