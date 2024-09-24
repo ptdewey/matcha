@@ -35,8 +35,10 @@ type Model struct {
 	SelectedNote data.Note
 
 	// inputs for create mode
-	Inputs  []textinput.Model
-	focused int
+	Inputs           []textinput.Model
+	focused          int
+	Templates        []config.NoteTemplate
+	selectedTemplate int
 
 	err error
 }
@@ -46,7 +48,6 @@ func init() {
 }
 
 func (m Model) Init() tea.Cmd {
-	// return nil
 	return textinput.Blink
 }
 
@@ -54,12 +55,17 @@ func InitialModel() Model {
 	// TODO: possibly move this somewhere else to avoid loading notes during quick-launch/create
 	items := data.GetItems(cfg.NoteSources)
 	inputs := initTextInput()
+	templates := config.ReadTemplates(cfg)
 
+	// TODO: populate templates from config?
+	// - config dir option (assume text/template formatting)
 	return Model{
-		List:        list.New(items, list.NewDefaultDelegate(), 0, 0),
-		NoteSources: cfg.NoteSources,
-		Inputs:      inputs,
-		focused:     0,
-		err:         nil,
+		List:             list.New(items, list.NewDefaultDelegate(), 0, 0),
+		NoteSources:      cfg.NoteSources,
+		Inputs:           inputs,
+		focused:          0,
+		err:              nil,
+		Templates:        templates,
+		selectedTemplate: -1,
 	}
 }

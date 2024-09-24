@@ -6,16 +6,19 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
+
+	"github.com/ptdewey/oolong/internal/utils"
 )
 
 var configFiles []string = []string{"oolong.json", ".oolong.json", ".oolongrc"}
 
+// CHANGE: to list with template selection for create to allow multiple options
+// - possibly allow multiple template directories?
 type Config struct {
 	NoteSources []string `json:"noteSources"`
-	// CHANGE: to list with template selection for create to allow multiple options
-	DefaultExt string `json:"defaultExt"`
-	// TODO: template locations
+	DefaultExt  string   `json:"defaultExt"`
+	UseTemplate bool     `json:"useTemplate"`
+	TemplateDir string   `json:"templateDir"`
 }
 
 func ParseConfig() Config {
@@ -39,13 +42,18 @@ func ParseConfig() Config {
 	}
 
 	for i, src := range cfg.NoteSources {
-		temp, err := tildeToHome(src)
+		temp, err := utils.TildeToHome(src)
 		if err != nil {
 			// CHANGE: maybe switch to logging instead of print?
 			fmt.Println(err)
 			continue
 		}
 		cfg.NoteSources[i] = temp
+	}
+
+	cfg.TemplateDir, err = utils.TildeToHome(cfg.TemplateDir)
+	if err != nil {
+		cfg.TemplateDir = ""
 	}
 
 	return cfg
@@ -94,18 +102,4 @@ func defaultConfig() Config {
 	}
 
 	panic("Error: No config file specified and no fallback was found.")
-}
-
-func tildeToHome(path string) (string, error) {
-	if !strings.HasPrefix(path, "~/") {
-		return path, nil
-	}
-
-	home, err := os.UserHomeDir()
-	if err != nil {
-		fmt.Println("Error getting user home directory:", err)
-		return "", err
-	}
-
-	return strings.Replace(path, "~", home, 1), nil
 }

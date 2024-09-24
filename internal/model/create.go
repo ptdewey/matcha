@@ -11,12 +11,13 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/ptdewey/oolong/internal/editor"
 	"github.com/ptdewey/oolong/internal/notes"
+	"github.com/ptdewey/oolong/internal/utils"
 )
 
 const (
-	name = iota
-	dir
-	ext
+	NAME = iota
+	DIR
+	EXT
 )
 
 // TODO: inherit from config? (also add selector to change between defaults and templates)
@@ -36,7 +37,18 @@ func (m Model) updateCreate(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if m.focused == len(m.Inputs)-1 {
 				notePath := m.checkJoinInputs()
 
-				if err := notes.CreateNote(notePath); err != nil {
+				ext := filepath.Ext(notePath)
+				templateSource := ""
+				for _, template := range m.Templates {
+					fmt.Println(template.Ext, ext)
+					if template.Ext == ext {
+						templateSource = template.Name
+						fmt.Println(templateSource)
+						break
+					}
+				}
+
+				if err := notes.CreateNote(notePath, templateSource); err != nil {
 					fmt.Println("Error creating note:", err)
 					return m, nil
 				}
@@ -88,11 +100,11 @@ func (m Model) viewCreate() string {
 `,
 			HeaderStyle.Render("Create Note:"),
 			InputHeaderStyle.Render("Filename"),
-			InputStyle.Render(m.Inputs[name].View()),
+			InputStyle.Render(m.Inputs[NAME].View()),
 			InputHeaderStyle.Render("Directory"),
-			InputStyle.Render(m.Inputs[dir].View()),
+			InputStyle.Render(m.Inputs[DIR].View()),
 			InputHeaderStyle.Render("Extension"),
-			InputStyle.Render(m.Inputs[ext].View()),
+			InputStyle.Render(m.Inputs[EXT].View()),
 			ContinueStyle.Render("Continue ->"),
 		))
 }
@@ -105,21 +117,21 @@ func initTextInput() []textinput.Model {
 	var inputs []textinput.Model = make([]textinput.Model, 3)
 
 	// filename
-	inputs[name] = textinput.New()
-	inputs[name].Placeholder = defaultName
-	inputs[name].Focus()
-	inputs[name].CharLimit = 0
-	inputs[name].Width = 20
+	inputs[NAME] = textinput.New()
+	inputs[NAME].Placeholder = defaultName
+	inputs[NAME].Focus()
+	inputs[NAME].CharLimit = 0
+	inputs[NAME].Width = 20
 
 	// directory
-	inputs[dir] = textinput.New()
-	inputs[dir].Placeholder = defaultPath
-	inputs[dir].Width = 40
+	inputs[DIR] = textinput.New()
+	inputs[DIR].Placeholder = defaultPath
+	inputs[DIR].Width = 40
 
 	// file extension
-	inputs[ext] = textinput.New()
-	inputs[ext].Placeholder = cfg.DefaultExt
-	inputs[ext].Width = 10
+	inputs[EXT] = textinput.New()
+	inputs[EXT].Placeholder = cfg.DefaultExt
+	inputs[EXT].Width = 10
 
 	// TODO: field for templates to use? (might need to be a selector of some kind to allow multiple)
 
@@ -139,16 +151,23 @@ func (m *Model) prevInput() {
 
 func (m *Model) checkJoinInputs() string {
 	// check name, set to default if empty
-	n := m.Inputs[name]
+	n := m.Inputs[NAME]
 	if n.Value() == "" {
 		n.SetValue(n.Placeholder)
 	}
 
 	// check directory, set to default if empty
-	// FIX: add handling of ~/ in input
-	d := m.Inputs[dir]
+	d := m.Inputs[DIR]
 	if d.Value() == "" {
 		d.SetValue(d.Placeholder)
+	} else {
+		// if dir is valid, attempt to convert ~/ to /home/username if necessary
+		path, err := utils.TildeToHome(d.Value())
+		if err != nil {
+			d.SetValue(d.Placeholder)
+		} else {
+			d.SetValue(path)
+		}
 	}
 	if _, err := os.Stat(d.Value()); os.IsNotExist(err) {
 		// create directories that don't exist
@@ -160,7 +179,7 @@ func (m *Model) checkJoinInputs() string {
 	}
 
 	// check file extenson, set to default if empty
-	e := m.Inputs[ext]
+	e := m.Inputs[EXT]
 	if e.Value() == "" {
 		e.SetValue(e.Placeholder)
 	} else if !strings.HasPrefix(e.Value(), ".") {

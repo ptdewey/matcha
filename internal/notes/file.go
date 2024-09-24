@@ -14,7 +14,7 @@ type CreateFinishedMsg struct {
 	Err error
 }
 
-func CreateNote(notePath string) error {
+func CreateNote(notePath string, templatePath string) error {
 	info, err := os.Stat(notePath)
 	if errors.Is(err, os.ErrNotExist) {
 		f, err := os.Create(notePath)
@@ -23,7 +23,13 @@ func CreateNote(notePath string) error {
 		}
 		defer f.Close()
 
-		// TODO: template handling?
+		// if template path is specifed, populate generated note with template contents
+		if templatePath != "" {
+			if err := populateTemplate(f, templatePath); err != nil {
+				return err
+			}
+
+		}
 
 		return nil
 
@@ -38,14 +44,13 @@ func CreateNote(notePath string) error {
 	return nil
 }
 
-func createFromTemplate(f *os.File, templatePath string) error {
+func populateTemplate(f *os.File, templatePath string) error {
 	tmpl, err := template.ParseFiles(templatePath)
 	if err != nil {
 		return err
 	}
 
-	// TODO: templates (as defined in config)
-	if err = tmpl.Execute(f, nil); err != nil {
+	if err = tmpl.Execute(f, templateData(f.Name())); err != nil {
 		return err
 	}
 
@@ -55,7 +60,6 @@ func createFromTemplate(f *os.File, templatePath string) error {
 func GenFileNamePath() (string, string) {
 	// TODO: make this more customizable with config
 	t := time.Now()
-	// date := strings.ToLower(t.Format("Jan")) + t.Format("2")
 	date := t.Format("01-02-06")
 
 	wd, err := os.Getwd()
