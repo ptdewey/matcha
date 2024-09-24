@@ -7,10 +7,10 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/ptdewey/oolong/internal/utils"
+	"github.com/ptdewey/matcha/internal/utils"
 )
 
-var configFiles []string = []string{"oolong.json", ".oolong.json", ".oolongrc"}
+var configFiles []string = []string{"matcha.json", ".matcha.json", ".matcharc"}
 
 // CHANGE: to list with template selection for create to allow multiple options
 // - possibly allow multiple template directories?
@@ -98,6 +98,8 @@ func defaultConfig() Config {
 		return Config{
 			NoteSources: []string{dir},
 			DefaultExt:  ".md",
+			UseTemplate: false,
+			TemplateDir: "",
 		}
 	}
 

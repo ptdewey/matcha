@@ -58,6 +58,7 @@ func GetItems(noteSources []string) []list.Item {
 func getDirContents(dir string) ([]list.Item, error) {
 	var entries []list.Item
 
+	// TODO: hide hidden files from showing up (or specifically template files?) - add config option
 	err := filepath.WalkDir(dir, func(path string, entry os.DirEntry, err error) error {
 		if err != nil {
 			return err

@@ -4,8 +4,8 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/ptdewey/oolong/internal/config"
-	"github.com/ptdewey/oolong/internal/data"
+	"github.com/ptdewey/matcha/internal/config"
+	"github.com/ptdewey/matcha/internal/data"
 )
 
 const (

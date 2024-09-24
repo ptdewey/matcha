@@ -2,7 +2,7 @@ package model
 
 import (
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/ptdewey/oolong/internal/editor"
+	"github.com/ptdewey/matcha/internal/editor"
 )
 
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {

@@ -31,7 +31,7 @@ var (
 	ContinueStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("1"))
 )
 
-var OolongStyle = lipgloss.NewStyle().Margin(1, 2).
+var MatchaStyle = lipgloss.NewStyle().Margin(1, 2).
 	Foreground(lipgloss.Color("default"))
 
 // TODO: handle all the style stuff better

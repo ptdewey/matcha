@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/ptdewey/oolong/internal/model"
+	"github.com/ptdewey/matcha/internal/model"
 
 	tea "github.com/charmbracelet/bubbletea"
 )

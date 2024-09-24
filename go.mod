@@ -1,4 +1,4 @@
-module github.com/ptdewey/oolong
+module github.com/ptdewey/matcha
 
 go 1.22.5
 

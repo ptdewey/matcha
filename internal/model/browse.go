@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/ptdewey/oolong/internal/data"
-	"github.com/ptdewey/oolong/internal/editor"
+	"github.com/ptdewey/matcha/internal/data"
+	"github.com/ptdewey/matcha/internal/editor"
 )
 
 func (m Model) updateBrowse(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -34,7 +34,7 @@ func (m Model) updateBrowse(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	case tea.WindowSizeMsg:
 		// dynamically handle window sizing (fixes no list items showing)
-		h, v := OolongStyle.GetFrameSize()
+		h, v := MatchaStyle.GetFrameSize()
 		m.width, m.height = msg.Width-h, msg.Height-v
 		m.List.SetSize(m.width, m.height)
 	}
@@ -47,5 +47,5 @@ func (m Model) updateBrowse(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m Model) viewBrowse() string {
 	// TODO: customize views
-	return OolongStyle.Render(m.List.View())
+	return MatchaStyle.Render(m.List.View())
 }

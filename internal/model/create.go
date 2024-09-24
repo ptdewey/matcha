@@ -9,9 +9,9 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/ptdewey/oolong/internal/editor"
-	"github.com/ptdewey/oolong/internal/notes"
-	"github.com/ptdewey/oolong/internal/utils"
+	"github.com/ptdewey/matcha/internal/editor"
+	"github.com/ptdewey/matcha/internal/notes"
+	"github.com/ptdewey/matcha/internal/utils"
 )
 
 const (
