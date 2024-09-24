@@ -6,10 +6,10 @@ Matcha lets you quickly search and edit your notes, create new ones from templat
 Matcha is built with [Bubble Tea](https://github.com/charmbracelet/bubbletea).
 
 Create Mode:
-[Create mode gif](https://vhs.charm.sh/vhs-6ejDHyAqGWC2jhtILak67F.gif)
+![Create mode gif](https://vhs.charm.sh/vhs-6ejDHyAqGWC2jhtILak67F.gif)
 
 Search Mode:
-[Search mode gif](https://vhs.charm.sh/vhs-4kSCJXt5B2VcZC14XOeFdu.gif)
+![Search mode gif](https://vhs.charm.sh/vhs-4kSCJXt5B2VcZC14XOeFdu.gif)
 
 <!-- TODO: screenshot/gif -->
 
