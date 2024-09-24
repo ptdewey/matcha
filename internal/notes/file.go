@@ -67,17 +67,21 @@ func GenFileNamePath() (string, string) {
 		return "", ""
 	}
 
+	// trim trailing path separator before usage to ensure consistent splitting
+	wd, _ = strings.CutSuffix(wd, string(os.PathSeparator))
 	cwd := filepath.Base(wd)
+
 	name := fmt.Sprintf("%s-%s", cwd, date)
 
 	splitPath := strings.Split(wd, string(os.PathSeparator))
-	if len(splitPath) < 3 {
-		if len(splitPath) < 2 {
+	if len(splitPath) < 2 {
+		if len(splitPath) == 0 {
 			return name, ""
 		}
 		return name, splitPath[0]
 	}
-	path := strings.Join(splitPath[len(splitPath)-3:len(splitPath)-1], string(os.PathSeparator))
+
+	path := strings.Join(splitPath[len(splitPath)-2:], string(os.PathSeparator))
 
 	return name, path
 }
