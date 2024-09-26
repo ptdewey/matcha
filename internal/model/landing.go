@@ -18,7 +18,8 @@ func (m Model) updateLanding(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.cursor--
 			}
 		case "right", "l", "down", "j":
-			if m.cursor < 1 {
+			// adjust this number if buttons are added/removed
+			if m.cursor < 2 {
 				m.cursor++
 			}
 
@@ -43,19 +44,25 @@ func (m Model) viewLanding() string {
 		return ""
 	}
 
-	var createButton, searchButton string
+	var quickButton, createButton, searchButton string
 
 	if m.cursor == 0 {
+		quickButton = ActiveButton.Render("Quick Note")
+		createButton = InactiveButton.Render("Create Note")
+		searchButton = InactiveButton.Render("Search Notes")
+	} else if m.cursor == 1 {
+		quickButton = InactiveButton.Render("Quick Note")
 		createButton = ActiveButton.Render("Create Note")
 		searchButton = InactiveButton.Render("Search Notes")
 	} else {
+		quickButton = InactiveButton.Render("Quick Note")
 		createButton = InactiveButton.Render("Create Note")
 		searchButton = ActiveButton.Render("Search Notes")
 	}
 
 	gap := lipgloss.NewStyle().Width(5).Render(" ")
 
-	buttons := lipgloss.JoinHorizontal(lipgloss.Top, createButton, gap, searchButton)
+	buttons := lipgloss.JoinHorizontal(lipgloss.Top, quickButton, gap, createButton, gap, searchButton)
 
 	ui := lipgloss.Place(m.width, m.height, lipgloss.Center, lipgloss.Center, buttons)
 

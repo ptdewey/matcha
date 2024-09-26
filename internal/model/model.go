@@ -10,6 +10,7 @@ import (
 
 const (
 	LANDING = iota
+	QUICK
 	CREATE
 	SEARCH
 	BROWSE

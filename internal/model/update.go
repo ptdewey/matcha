@@ -23,11 +23,11 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		}
 	case editor.EditorFinishedMsg:
-		m.Mode = BROWSE
-		m.List.ResetFilter()
 		if msg.Err != nil {
 			return m, tea.Quit
 		}
+		m.Mode = BROWSE
+		m.List.ResetFilter()
 	}
 
 	// mode is chosen on landing page
@@ -36,6 +36,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 
 	switch m.Mode {
+	case QUICK:
+		return m.updateQuick(msg)
 	case CREATE:
 		return m.updateCreate(msg)
 	case BROWSE:
