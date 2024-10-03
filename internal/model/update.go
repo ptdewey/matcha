@@ -2,7 +2,7 @@ package model
 
 import (
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/ptdewey/matcha/internal/editor"
+	"github.com/ptdewey/matcha/internal/utils"
 )
 
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -22,7 +22,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if k == "esc" || k == "ctrl+c" || k == "q" {
 			return m, tea.Quit
 		}
-	case editor.EditorFinishedMsg:
+	case utils.EditorFinishedMsg:
 		if msg.Err != nil {
 			return m, tea.Quit
 		}

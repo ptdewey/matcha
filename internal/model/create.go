@@ -9,7 +9,6 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/ptdewey/matcha/internal/editor"
 	"github.com/ptdewey/matcha/internal/notes"
 	"github.com/ptdewey/matcha/internal/utils"
 )
@@ -53,7 +52,7 @@ func (m Model) updateCreate(msg tea.Msg) (tea.Model, tea.Cmd) {
 					return m, nil
 				}
 
-				return m, editor.OpenEditor(notePath)
+				return m, utils.OpenEditor(notePath)
 			}
 			m.nextInput()
 		case tea.KeyCtrlC, tea.KeyEsc:
@@ -120,8 +119,8 @@ func initTextInput() []textinput.Model {
 	inputs[NAME] = textinput.New()
 	inputs[NAME].Placeholder = defaultName
 	inputs[NAME].Focus()
-	inputs[NAME].CharLimit = 0
-	inputs[NAME].Width = 20
+	// FIX: truncate left side of placeholder, not right side (i.e. replace /home/user/note.md with .../note.md if too long)
+	inputs[NAME].Width = 25
 
 	// directory
 	inputs[DIR] = textinput.New()

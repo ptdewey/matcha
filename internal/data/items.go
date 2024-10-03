@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"slices"
+	"strings"
 
 	"github.com/charmbracelet/bubbles/list"
 )
@@ -41,10 +42,10 @@ func (i Note) Path() string {
 	return i.path
 }
 
-func GetItems(noteSources []string) []list.Item {
+func GetItems(noteSources []string, templateDir string) []list.Item {
 	var out []list.Item
 	for _, src := range noteSources {
-		items, err := getDirContents(src)
+		items, err := getDirContents(src, templateDir)
 		if err != nil {
 			fmt.Println(err)
 			continue
@@ -55,13 +56,17 @@ func GetItems(noteSources []string) []list.Item {
 	return out
 }
 
-func getDirContents(dir string) ([]list.Item, error) {
+func getDirContents(dir string, templateDir string) ([]list.Item, error) {
 	var entries []list.Item
 
-	// TODO: hide hidden files from showing up (or specifically template files?) - add config option
 	err := filepath.WalkDir(dir, func(path string, entry os.DirEntry, err error) error {
 		if err != nil {
 			return err
+		}
+
+		// hide template directories from results
+		if strings.Contains(path, templateDir) {
+			return nil
 		}
 
 		relPath, err := filepath.Rel(dir, path)

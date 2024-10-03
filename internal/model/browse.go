@@ -5,7 +5,7 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/ptdewey/matcha/internal/data"
-	"github.com/ptdewey/matcha/internal/editor"
+	"github.com/ptdewey/matcha/internal/utils"
 )
 
 func (m Model) updateBrowse(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -29,7 +29,7 @@ func (m Model) updateBrowse(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.SelectedNote = item
 
 				// open not for editing
-				return m, editor.OpenEditor(item.Path())
+				return m, utils.OpenEditor(item.Path())
 			}
 		}
 	case tea.WindowSizeMsg:

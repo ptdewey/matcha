@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/ptdewey/matcha/internal/editor"
 	"github.com/ptdewey/matcha/internal/notes"
+	"github.com/ptdewey/matcha/internal/utils"
 )
 
 func (m Model) updateQuick(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -40,7 +40,7 @@ func (m Model) updateQuick(msg tea.Msg) (tea.Model, tea.Cmd) {
 	//   - not an issue in create.go, likely because wrapped in keymsg handler
 	m.ModeChosen = false
 
-	return m, editor.OpenEditor(notePath)
+	return m, utils.OpenEditor(notePath)
 }
 
 func (m Model) viewQuick() string {
