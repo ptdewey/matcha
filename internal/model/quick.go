@@ -38,7 +38,8 @@ func (m Model) updateQuick(msg tea.Msg) (tea.Model, tea.Cmd) {
 	// - open editor message should be sent but seems to be delayed?
 	// - maybe this could be handled with a message in this function?
 	//   - not an issue in create.go, likely because wrapped in keymsg handler
-	m.ModeChosen = false
+	m.ModeChosen = true
+	m.Mode = SEARCH
 
 	return m, utils.OpenEditor(notePath)
 }
