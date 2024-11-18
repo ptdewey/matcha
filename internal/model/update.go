@@ -51,6 +51,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		// call update and ensure windowsize event is called
 		return m.(Model).updateBrowse(msg)
+	case QUIT:
+		return m, tea.Quit
 	}
 
 	return m, nil

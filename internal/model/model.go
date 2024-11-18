@@ -15,6 +15,7 @@ const (
 	SEARCH
 	BROWSE
 	EDIT
+	QUIT
 )
 
 var cfg config.Config

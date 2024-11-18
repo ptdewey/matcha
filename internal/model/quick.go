@@ -39,7 +39,8 @@ func (m Model) updateQuick(msg tea.Msg) (tea.Model, tea.Cmd) {
 	// - maybe this could be handled with a message in this function?
 	//   - not an issue in create.go, likely because wrapped in keymsg handler
 	m.ModeChosen = true
-	m.Mode = SEARCH
+	// m.Mode = SEARCH
+	m.Mode = QUIT
 
 	return m, utils.OpenEditor(notePath)
 }

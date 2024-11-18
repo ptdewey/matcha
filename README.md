@@ -42,8 +42,8 @@ TODO: explanation and usage of modes
 ## Configuration
 
 Matcha looks for one of the following configuration files in your home directory:
-- `matcha.json`
-- `.matcha.json`
+- `matcha.toml`
+- `.matcha.toml`
 - `.matcharc`
 
 Currently, matcha provides the following configuration options:
@@ -55,14 +55,12 @@ Currently, matcha provides the following configuration options:
 | templateDir | string | Path to template directories for creating new notes (experimental/WIP) |
 
 Example configuration:
-```json
-{
-    "noteSources": [
-        "~/notes"
-    ],
-    "defaultExt": ".md",
-    "useTemplate": false,
-    "templateDir": ""
-}
+```toml
+noteSources = [
+    "~/notes",
+]
+defaultExt = ".md"
+useTemplate = false
+templateDir = ""
 ```
 

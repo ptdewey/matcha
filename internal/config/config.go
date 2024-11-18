@@ -1,24 +1,25 @@
 package config
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 
+	"github.com/BurntSushi/toml"
 	"github.com/ptdewey/matcha/internal/utils"
 )
 
-var configFiles []string = []string{"matcha.json", ".matcha.json", ".matcharc"}
+var configFiles []string = []string{"matcha.toml", ".matcha.toml", ".matcharc"}
 
 // CHANGE: to list with template selection for create to allow multiple options
 // - possibly allow multiple template directories?
 type Config struct {
-	NoteSources []string `json:"noteSources"`
-	DefaultExt  string   `json:"defaultExt"`
-	UseTemplate bool     `json:"useTemplate"`
-	TemplateDir string   `json:"templateDir"`
+	NoteSources []string `toml:"noteSources"`
+	DefaultExt  string   `toml:"defaultExt"`
+	UseTemplate bool     `toml:"useTemplate"`
+	TemplateDir string   `toml:"templateDir"`
 }
 
 func ParseConfig() Config {
@@ -33,7 +34,7 @@ func ParseConfig() Config {
 	}
 
 	var cfg Config
-	if err = json.Unmarshal(contents, &cfg); err != nil {
+	if err = toml.Unmarshal(contents, &cfg); err != nil {
 		return defaultConfig()
 	}
 
@@ -44,8 +45,7 @@ func ParseConfig() Config {
 	for i, src := range cfg.NoteSources {
 		temp, err := utils.TildeToHome(src)
 		if err != nil {
-			// CHANGE: maybe switch to logging instead of print?
-			fmt.Println(err)
+			log.Println(err)
 			continue
 		}
 		cfg.NoteSources[i] = temp
@@ -62,7 +62,7 @@ func ParseConfig() Config {
 func findConfigurationFile() (string, error) {
 	home, err := os.UserHomeDir()
 	if err != nil {
-		fmt.Println("Error getting user home directory:", err)
+		log.Println("Error getting user home directory:", err)
 		return "", err
 	}
 
