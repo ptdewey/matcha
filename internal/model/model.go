@@ -55,7 +55,7 @@ func (m Model) Init() tea.Cmd {
 
 func InitialModel() Model {
 	// TODO: possibly move this somewhere else to avoid loading notes during quick-launch/create
-	items := data.GetItems(cfg.NoteSources, cfg.TemplateDir)
+	items := data.GetItems(cfg.NoteSources, cfg.TemplateDir, cfg.NoteExts)
 	inputs := initTextInput()
 	templates := config.ReadTemplates(cfg)
 

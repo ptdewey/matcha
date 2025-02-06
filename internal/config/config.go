@@ -20,6 +20,7 @@ type Config struct {
 	DefaultExt  string   `toml:"defaultExt"`
 	UseTemplate bool     `toml:"useTemplate"`
 	TemplateDir string   `toml:"templateDir"`
+	NoteExts    []string `toml:"noteExts"`
 }
 
 func ParseConfig() Config {

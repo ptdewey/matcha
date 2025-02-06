@@ -11,8 +11,6 @@ import (
 )
 
 // TODO: get note extensions from config file? (or use these)
-var noteExts = []string{".md", ".mdx", ".tex", ".txt", ".qmd", ".rmd", ".Rmd"}
-
 type Note struct {
 	title   string
 	desc    string
@@ -42,10 +40,10 @@ func (i Note) Path() string {
 	return i.path
 }
 
-func GetItems(noteSources []string, templateDir string) []list.Item {
+func GetItems(noteSources []string, templateDir string, noteExts []string) []list.Item {
 	var out []list.Item
 	for _, src := range noteSources {
-		items, err := getDirContents(src, templateDir)
+		items, err := getDirContents(src, templateDir, noteExts)
 		if err != nil {
 			fmt.Println(err)
 			continue
@@ -56,7 +54,7 @@ func GetItems(noteSources []string, templateDir string) []list.Item {
 	return out
 }
 
-func getDirContents(dir string, templateDir string) ([]list.Item, error) {
+func getDirContents(dir string, templateDir string, noteExts []string) ([]list.Item, error) {
 	var entries []list.Item
 
 	err := filepath.WalkDir(dir, func(path string, entry os.DirEntry, err error) error {
